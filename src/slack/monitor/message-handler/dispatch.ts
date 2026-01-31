@@ -165,8 +165,9 @@ export async function dispatchPreparedSlackMessage(prepared: PreparedSlackMessag
     removeAfterReply: ctx.removeAckAfterReply,
     ackReactionPromise: prepared.ackReactionPromise,
     ackReactionValue: prepared.ackReactionValue,
-    remove: () =>
-      removeSlackReaction(
+    remove: async () => {
+      // Remove eyes emoji
+      await removeSlackReaction(
         message.channel,
         prepared.ackReactionMessageTs ?? "",
         prepared.ackReactionValue,
@@ -174,7 +175,24 @@ export async function dispatchPreparedSlackMessage(prepared: PreparedSlackMessag
           token: ctx.botToken,
           client: ctx.app.client,
         },
-      ),
+      );
+      // Add check mark emoji
+      const { reactSlackMessage } = await import("../../actions.js");
+      await reactSlackMessage(
+        message.channel,
+        prepared.ackReactionMessageTs ?? "",
+        "white_check_mark",
+        {
+          token: ctx.botToken,
+          client: ctx.app.client,
+        },
+      ).catch((err) => {
+        // Silently fail if check mark can't be added
+        if (shouldLogVerbose()) {
+          logVerbose(`slack: could not add check mark: ${String(err)}`);
+        }
+      });
+    },
     onError: (err) => {
       logAckFailure({
         log: logVerbose,
