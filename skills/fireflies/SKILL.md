@@ -1,7 +1,7 @@
 ---
 name: fireflies
 description: Search and retrieve Fireflies.ai call transcripts and summaries. Use when asked about past calls, meetings, conversations with specific people or companies. Handles relative time queries like "last week", "two weeks ago", "a month ago".
-metadata: {"moltbot":{"requires":{"env":["FIREFLIES_API_KEY"],"primaryEnv":"FIREFLIES_API_KEY"}}
+metadata: {"moltbot":{"requires":{"env":["FIREFLIES_API_KEY"]},"primaryEnv":"FIREFLIES_API_KEY"}}
 ---
 
 # Fireflies
