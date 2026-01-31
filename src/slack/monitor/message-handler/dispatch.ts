@@ -8,7 +8,7 @@ import { createTypingCallbacks } from "../../../channels/typing.js";
 import { createReplyDispatcherWithTyping } from "../../../auto-reply/reply/reply-dispatcher.js";
 import { resolveStorePath, updateLastRoute } from "../../../config/sessions.js";
 import { danger, logVerbose, shouldLogVerbose } from "../../../globals.js";
-import { removeSlackReaction } from "../../actions.js";
+import { removeSlackReaction, reactSlackMessage } from "../../actions.js";
 import { resolveSlackThreadTargets } from "../../threading.js";
 
 import { createSlackReplyDeliveryPlan, deliverReplies } from "../replies.js";
@@ -177,7 +177,6 @@ export async function dispatchPreparedSlackMessage(prepared: PreparedSlackMessag
         },
       );
       // Add check mark emoji
-      const { reactSlackMessage } = await import("../../actions.js");
       await reactSlackMessage(
         message.channel,
         prepared.ackReactionMessageTs ?? "",
