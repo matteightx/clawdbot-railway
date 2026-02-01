@@ -32,9 +32,9 @@ RUN pnpm ui:build
 
 ENV NODE_ENV=production
 
-# Railway-specific: default gateway config (bind must be "lan" not "0.0.0.0")
+# Railway-specific: default gateway config with Slack emoji/threading settings
 RUN mkdir -p /root/.clawdbot && \
-    echo '{"gateway":{"mode":"local","bind":"lan","trustedProxies":["100.64.0.0/10","10.0.0.0/8"],"controlUi":{"allowInsecureAuth":true}}}' > /root/.clawdbot/moltbot.json
+    echo '{"gateway":{"mode":"local","bind":"lan","trustedProxies":["100.64.0.0/10","10.0.0.0/8"],"controlUi":{"allowInsecureAuth":true}},"messages":{"ackReaction":"👀","ackReactionScope":"all","removeAckAfterReply":true},"channels":{"slack":{"replyToMode":"all"}}}' > /root/.clawdbot/moltbot.json
 
 # Fix stale config: delete old config and write fresh one
-ENTRYPOINT ["sh", "-c", "mkdir -p /data/.clawdbot; rm -f /data/.clawdbot/moltbot.json; echo '{\"gateway\":{\"mode\":\"local\",\"bind\":\"lan\",\"trustedProxies\":[\"100.64.0.0/10\",\"10.0.0.0/8\"],\"controlUi\":{\"allowInsecureAuth\":true}}}' > /data/.clawdbot/moltbot.json; exec node dist/index.js gateway run --bind lan --port $PORT --allow-unconfigured"]
+ENTRYPOINT ["sh", "-c", "mkdir -p /data/.clawdbot; rm -f /data/.clawdbot/moltbot.json; echo '{\"gateway\":{\"mode\":\"local\",\"bind\":\"lan\",\"trustedProxies\":[\"100.64.0.0/10\",\"10.0.0.0/8\"],\"controlUi\":{\"allowInsecureAuth\":true}},\"messages\":{\"ackReaction\":\"👀\",\"ackReactionScope\":\"all\",\"removeAckAfterReply\":true},\"channels\":{\"slack\":{\"replyToMode\":\"all\"}}}' > /data/.clawdbot/moltbot.json; exec node dist/index.js gateway run --bind lan --port $PORT --allow-unconfigured"]
